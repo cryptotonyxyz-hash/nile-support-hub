@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Nile Merchant Support Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#f4f6f5; --surface:#ffffff; --surface-2:#eef2f0; --ink:#14201b; --ink-2:#44554d; --ink-3:#6b7d74;
+  --line:#d9e2dd; --brand:#0c6b4f; --brand-dark:#084c38; --brand-soft:#e2f1ea;
+  --amber-bg:#fdf3e0; --amber-ink:#7a5200; --amber-dot:#d9930d;
+  --red-bg:#fdecec; --red-ink:#8f1d1d; --red-dot:#d92d20;
+  --green-bg:#e6f4ec; --green-ink:#0c5c36; --green-dot:#12805c;
+  --blue-bg:#e8effc; --blue-ink:#1d4f9c;
+  --shadow:0 10px 30px rgba(16,42,32,.10); --radius:14px;
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:#0e1512; --surface:#16211c; --surface-2:#1c2a24; --ink:#eef4f1; --ink-2:#b9cdc3; --ink-3:#8ba398;
+  --line:#2a3b33; --brand:#2fb98a; --brand-dark:#7adbb6; --brand-soft:#173528;
+  --amber-bg:#3a2d10; --amber-ink:#f2c66d; --red-bg:#3d1a1a; --red-ink:#f2a3a3;
+  --green-bg:#143527; --green-ink:#8fe0b6; --blue-bg:#1b2c4d; --blue-ink:#a9c6f5;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.55}
+button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]),textarea{font:inherit}
+button,select,input,textarea{min-height:44px}
+h1,h2,h3{line-height:1.2;margin:0}
+p{margin:0}
+a{color:var(--brand)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:14px;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:11px;min-width:0}
+.logo-mark{width:40px;height:40px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:19px;flex:none}
+.logo b{font-size:17px;display:block;line-height:1.15}
+.logo span{font-size:12.5px;color:var(--ink-3);display:block}
+.demo-pill{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--amber-bg);color:var(--amber-ink);border:1px solid var(--amber-dot);padding:6px 10px;border-radius:999px}
+.theme-btn{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:700;font-size:13.5px;min-height:40px}
+.hero{padding:34px 0 8px}
+.hero h1{font-size:clamp(28px,4.5vw,42px);font-weight:800;letter-spacing:-.02em;max-width:760px}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero p.lede{margin-top:14px;max-width:720px;color:var(--ink-2);font-size:17px}
+.viewtabs{display:flex;gap:8px;margin:24px 0 4px;flex-wrap:wrap}
+.viewtabs button{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer}
+.viewtabs button[aria-selected="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.fixnote{margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:grid;gap:14px}
+@media(min-width:820px){.fixnote{grid-template-columns:1fr 1fr 1fr}}
+.fixnote h3{font-size:15px;margin-bottom:5px}
+.fixnote p{font-size:14px;color:var(--ink-2)}
+.fixnote .n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--brand);font-weight:600}
+section{padding:26px 0 6px}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2{font-size:23px;font-weight:800;letter-spacing:-.01em}
+.sec-head p{color:var(--ink-2);font-size:14.5px}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:900px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.stat .k{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-size:32px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+.stat .s{font-size:13px;color:var(--ink-2);margin-top:2px}
+.stat.alert{border-color:var(--red-dot)}
+.stat.warn{border-color:var(--amber-dot)}
+.split{display:grid;gap:12px;margin-top:12px}
+@media(min-width:820px){.split{grid-template-columns:1fr 1fr}}
+.split-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.split-card h3{font-size:16px;margin-bottom:10px}
+.meter{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:6px 0 4px}
+.meter i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.mrow{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.mrow:last-child{border-bottom:0}
+.mrow b{font-variant-numeric:tabular-nums}
+.sla-table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:14.5px}
+.sla-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.sla-table th,.sla-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.sla-table th{background:var(--surface-2);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2)}
+.sla-table tr:last-child td{border-bottom:0}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.tag-crit{background:var(--red-bg);color:var(--red-ink)}
+.tag-std{background:var(--blue-bg);color:var(--blue-ink)}
+.tag-prem{background:#efe7fb;color:#5b21b6}
+html[data-theme="dark"] .tag-prem{background:#2e2150;color:#cdbcf7}
+.tag-plan{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.tag-open{background:var(--amber-bg);color:var(--amber-ink)}
+.tag-prog{background:var(--blue-bg);color:var(--blue-ink)}
+.tag-res{background:var(--green-bg);color:var(--green-ink)}
+.tag-breach{background:var(--red-bg);color:var(--red-ink)}
+.tag-risk{background:var(--amber-bg);color:var(--amber-ink)}
+.tag-ok{background:var(--green-bg);color:var(--green-ink)}
+.grid2{display:grid;gap:16px}
+@media(min-width:960px){.grid2{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.card h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.card .sub{font-size:14px;color:var(--ink-2);margin-bottom:16px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:10px 12px}
+.field textarea{min-height:96px;resize:vertical}
+.field .hint{font-size:12.5px;color:var(--ink-3);margin-top:4px}
+.frow{display:grid;gap:13px}
+@media(min-width:560px){.frow{grid-template-columns:1fr 1fr}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:800;cursor:pointer;min-height:48px}
+.btn:hover{background:var(--brand-dark)}
+.btn.secondary{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.btn.block{width:100%}
+.success-box{margin-top:16px;background:var(--green-bg);color:var(--green-ink);border-radius:10px;padding:14px 16px;font-size:14.5px;display:none}
+.success-box.show{display:block}
+.success-box .tid{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:17px}
+.triage-box{margin-top:12px;background:var(--brand-soft);border-radius:10px;padding:14px 16px;font-size:14px;display:none}
+.triage-box.show{display:block}
+.triage-box b{color:var(--brand-dark)}
+html[data-theme="dark"] .triage-box b{color:var(--brand-dark)}
+.err{display:none;margin-top:12px;background:var(--red-bg);color:var(--red-ink);border-radius:10px;padding:12px 14px;font-size:14px}
+.err.show{display:block}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filters button{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:13.5px;min-height:40px}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.inbox{display:grid;gap:10px}
+.trow{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:10px;cursor:pointer;text-align:left;width:100%;color:var(--ink)}
+.trow:hover{border-color:var(--brand)}
+.trow.breached{border-left:5px solid var(--red-dot)}
+.trow.atrisk{border-left:5px solid var(--amber-dot)}
+.trow-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.trow-top .tid{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
+.trow-top .when{margin-left:auto;font-size:12.5px;color:var(--ink-3)}
+.trow .issue{font-weight:700;font-size:15.5px}
+.trow-meta{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.trow-meta b{color:var(--ink)}
+.trow-sla{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px}
+.clock{font-variant-numeric:tabular-nums;font-weight:700}
+.clock.over{color:var(--red-dot)}
+.clock.soon{color:var(--amber-dot)}
+@media(min-width:900px){
+  .trow{grid-template-columns:1fr auto;align-items:center}
+  .trow-main{min-width:0}
+  .trow-side{text-align:right;display:grid;gap:6px;justify-items:end}
+}
+.track-result{margin-top:16px;display:none}
+.track-result.show{display:block}
+.timeline{list-style:none;margin:14px 0 0;padding:0}
+.timeline li{position:relative;padding:0 0 16px 26px;font-size:14.5px}
+.timeline li::before{content:"";position:absolute;left:6px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--surface);border:3px solid var(--brand)}
+.timeline li::after{content:"";position:absolute;left:11px;top:20px;bottom:0;width:2px;background:var(--line)}
+.timeline li:last-child::after{display:none}
+.timeline li.pending{color:var(--ink-3)}
+.timeline li.pending::before{border-color:var(--line)}
+.timeline .tt{font-size:12.5px;color:var(--ink-3)}
+.kv{display:grid;gap:8px;margin-top:12px}
+@media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
+.kv div{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:14px}
+.kv .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(10,20,16,.55);display:none;z-index:60;padding:16px;overflow:auto}
+.modal.open{display:block}
+.modal-card{background:var(--surface);color:var(--ink);border-radius:16px;max-width:640px;margin:30px auto;padding:24px;box-shadow:var(--shadow)}
+.modal-card h3{font-size:20px;margin-bottom:2px;padding-right:40px}
+.close-x{float:right;background:var(--surface-2);border:1px solid var(--line);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;color:var(--ink)}
+.chat-fab{position:fixed;right:18px;bottom:18px;z-index:70;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:14px 20px;font-weight:800;box-shadow:var(--shadow);cursor:pointer;display:flex;gap:8px;align-items:center;min-height:52px}
+.chat-panel{position:fixed;right:18px;bottom:82px;z-index:70;width:min(360px,calc(100vw - 24px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);display:none;flex-direction:column;overflow:hidden}
+.chat-panel.open{display:flex}
+.chat-head{background:var(--brand);color:#fff;padding:14px 16px}
+.chat-head b{font-size:15.5px;display:block}
+.chat-head span{font-size:12.5px;opacity:.9}
+.chat-body{padding:14px;display:grid;gap:10px;max-height:320px;overflow:auto;background:var(--bg)}
+.msg{max-width:85%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.45}
+.msg.agent{background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.user{background:var(--brand);color:#fff;justify-self:end;border-bottom-right-radius:4px}
+.msg.typing{color:var(--ink-3);font-style:italic}
+.chat-quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px;background:var(--bg)}
+.chat-quick button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 11px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--ink);min-height:36px}
+.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--surface)}
+.chat-form input{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);color:var(--ink);min-width:0}
+.chat-form button{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer}
+footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 90px;color:var(--ink-2);font-size:13.5px}
+footer p{max-width:760px}
+.note{font-size:13px;color:var(--ink-3);margin-top:8px}
+.hidden-view{display:none !important}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+@media(max-width:640px){
+  .sla-table thead{display:none}
+  .sla-table,.sla-table tbody,.sla-table tr,.sla-table td{display:block;width:100%}
+  .sla-table tr{padding:10px 0;border-bottom:1px solid var(--line)}
+  .sla-table tr:last-child{border-bottom:0}
+  .sla-table td{border-bottom:0;padding:5px 14px}
+  .sla-table td::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-bottom:2px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="logo">
+      <div class="logo-mark" aria-hidden="true">N</div>
+      <div>
+        <b>Nile Merchant Support Hub</b>
+        <span>Ticket portal, live chat and SLA tracking for Nile merchants</span>
+      </div>
+    </div>
+    <div class="demo-pill">
+      <span class="pill">Demo prototype</span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch colour theme">Dark mode</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <h1>Merchant support that merchants can <em>actually track</em>.</h1>
+    <p class="lede">Today, Nile merchant support runs on email alone. There is no live chat, no ticket portal, and no way for a merchant to see where a request stands. This hub is a working demo of the missing system: merchants submit and track requests, chat for quick help, and the support team works from one inbox where every ticket is triaged against Nile's published SLA.</p>
+
+    <div class="viewtabs" role="tablist" aria-label="Choose a view">
+      <button type="button" role="tab" id="tabMerchant" aria-selected="true">I am a merchant</button>
+      <button type="button" role="tab" id="tabSupport" aria-selected="false">Support team view</button>
+      <button type="button" id="jumpChat" aria-selected="false">Open live chat</button>
+    </div>
+
+    <div class="fixnote" aria-label="What this fixes">
+      <div>
+        <span class="n">01</span>
+        <h3>The gap today</h3>
+        <p>Support is a contact form and one email address (business@nile.ng). A merchant who reports a down storefront waits with no ticket number, no status, and no deadline they can check.</p>
+      </div>
+      <div>
+        <span class="n">02</span>
+        <h3>What this hub adds</h3>
+        <p>A ticket portal that issues a tracking ID on submission, a live chat for quick questions, and a track-my-request page that shows status, timeline and the SLA deadline for every request.</p>
+      </div>
+      <div>
+        <span class="n">03</span>
+        <h3>How the team keeps the SLA</h3>
+        <p>Every ticket is auto-triaged by issue type and plan tier the moment it arrives. Deadlines come from Nile's published SLA, and tickets about to breach are flagged before they do.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPPORT VIEW: dashboard -->
+  <div id="supportSections">
+    <section aria-labelledby="dashH">
+      <div class="sec-head">
+        <h2 id="dashH">Support dashboard</h2>
+        <p>Live from the inbox below. Counts update as new requests come in during this demo.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="k">Total tickets</div><div class="v" id="stTotal">0</div><div class="s" id="stTotalSub">Seeded demo tickets</div></div>
+        <div class="stat"><div class="k">Open vs resolved</div><div class="v" id="stOpen">0 / 0</div><div class="s">Open includes tickets awaiting a first response</div></div>
+        <div class="stat"><div class="k">First response compliance</div><div class="v" id="stFR">0%</div><div class="s">Against Nile's published SLA, decided tickets only</div></div>
+        <div class="stat"><div class="k">Resolution compliance</div><div class="v" id="stRes">0%</div><div class="s">Against proposed targets (see SLA table)</div></div>
+        <div class="stat alert"><div class="k">Breached</div><div class="v" id="stBreach">0</div><div class="s">Past the first response deadline with no reply</div></div>
+        <div class="stat warn"><div class="k">At risk</div><div class="v" id="stRisk">0</div><div class="s">Within 30 minutes of the first response deadline</div></div>
+        <div class="stat"><div class="k">Avg first response</div><div class="v" id="stAvg">0h</div><div class="s">Across tickets that have been answered</div></div>
+        <div class="stat"><div class="k">Critical tickets</div><div class="v" id="stCrit">0</div><div class="s">Storefront down or checkout fully broken</div></div>
+      </div>
+
+      <div class="split">
+        <div class="split-card">
+          <h3>Premium plan</h3>
+          <div class="mrow"><span>Tickets</span><b id="premCount">0</b></div>
+          <div class="mrow"><span>First response compliance</span><b id="premFR">n/a</b></div>
+          <div class="meter" aria-hidden="true"><i id="premBar" style="width:0%"></i></div>
+          <div class="mrow"><span>Open</span><b id="premOpen">0</b></div>
+          <div class="mrow"><span>Breached</span><b id="premBreach">0</b></div>
+        </div>
+        <div class="split-card">
+          <h3>Standard plan (Starter / Growth)</h3>
+          <div class="mrow"><span>Tickets</span><b id="stdCount">0</b></div>
+          <div class="mrow"><span>First response compliance</span><b id="stdFR">n/a</b></div>
+          <div class="meter" aria-hidden="true"><i id="stdBar" style="width:0%"></i></div>
+          <div class="mrow"><span>Open</span><b id="stdOpen">0</b></div>
+          <div class="mrow"><span>Breached</span><b id="stdBreach">0</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="slaH">
+      <div class="sec-head">
+        <h2 id="slaH">The SLA this system enforces</h2>
+        <p>First response times are Nile's published SLA. Resolution targets are proposed by this project, because Nile does not publish resolution times.</p>
+      </div>
+      <div class="sla-wrap">
+        <table class="sla-table">
+          <thead><tr><th>Track</th><th>What counts</th><th>Premium first response</th><th>Standard first response</th><th>Resolution target</th></tr></thead>
+          <tbody>
+            <tr>
+              <td data-label="Track"><span class="tag tag-crit">Critical</span></td>
+              <td data-label="What counts">Storefront down, or checkout completely broken</td>
+              <td data-label="Premium first response"><b>1 hour</b></td>
+              <td data-label="Standard first response"><b>4 hours</b></td>
+              <td data-label="Resolution target"><b>24 hours</b> <span class="tag tag-plan">Proposed</span></td>
+            </tr>
+            <tr>
+              <td data-label="Track"><span class="tag tag-std">Standard</span></td>
+              <td data-label="What counts">All other enquiries</td>
+              <td data-label="Premium first response"><b>6 hours</b></td>
+              <td data-label="Standard first response"><b>12 hours</b></td>
+              <td data-label="Resolution target"><b>72 hours</b> <span class="tag tag-plan">Proposed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Auto-triage rule: a ticket within 30 minutes of its first response deadline is flagged at risk. Past the deadline with no response, it is flagged breached and escalated to the top of the inbox.</p>
+    </section>
+  </div>
+
+  <!-- MERCHANT VIEW: portal + tracking -->
+  <div id="merchantSections">
+    <section aria-labelledby="portalH">
+      <div class="sec-head">
+        <h2 id="portalH">Merchant ticket portal</h2>
+        <p>Submit a request and get a tracking ID straight away. It appears in the support inbox below, triaged and timed.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Submit a support request</h3>
+          <p class="sub">Fields marked with the plan tier matter: Premium and Standard plans carry different SLA deadlines.</p>
+          <form id="ticketForm" novalidate>
+            <div class="frow">
+              <div class="field">
+                <label for="fName">Your name</label>
+                <input id="fName" name="name" type="text" placeholder="e.g. Adaeze O." autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="fStore">Store name</label>
+                <input id="fStore" name="store" type="text" placeholder="e.g. Zluva Fashion" required />
+              </div>
+            </div>
+            <div class="frow">
+              <div class="field">
+                <label for="fEmail">Email address</label>
+                <input id="fEmail" name="email" type="email" placeholder="you@yourstore.com" autocomplete="email" required />
+                <p class="hint">Used to find your request later on the tracking page.</p>
+              </div>
+              <div class="field">
+                <label for="fPlan">Plan tier</label>
+                <select id="fPlan" name="plan" required>
+                  <option value="Premium">Premium</option>
+                  <option value="Standard" selected>Standard (Starter / Growth)</option>
+                </select>
+              </div>
+            </div>
+            <div class="frow">
+              <div class="field">
+                <label for="fCategory">Issue category</label>
+                <select id="fCategory" name="category" required>
+                  <option value="Storefront down">Storefront down</option>
+                  <option value="Checkout or payments broken">Checkout or payments broken</option>
+                  <option value="Payouts and refunds">Payouts and refunds</option>
+                  <option value="Shipping and delivery">Shipping and delivery</option>
+                  <option value="Inventory and products">Inventory and products</option>
+                  <option value="Account, billing and plans" selected>Account, billing and plans</option>
+                  <option value="Domain and store settings">Domain and store settings</option>
+                  <option value="Something else">Something else</option>
+                </select>
+                <p class="hint">Storefront down and checkout broken are triaged as Critical. Everything else is Standard.</p>
+              </div>
+              <div class="field">
+                <label for="fChannel">How did you reach us?</label>
+                <select id="fChannel" name="channel">
+                  <option value="Ticket portal" selected>Ticket portal</option>
+                  <option value="Email">Email</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="In-app">In-app</option>
+                  <option value="Live chat">Live chat</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="fDesc">Describe the issue</label>
+              <textarea id="fDesc" name="description" placeholder="What happened, when did it start, and what have you tried?" required></textarea>
+            </div>
+            <button class="btn block" type="submit">Submit request</button>
+            <div class="err" id="formErr" role="alert"></div>
+            <div class="success-box" id="formSuccess" role="status"></div>
+            <div class="triage-box" id="triageBox"></div>
+          </form>
+        </div>
+
+        <div class="card" id="trackCard">
+          <h3>Track my request</h3>
+          <p class="sub">Enter your ticket ID (for example NIL-1008) or the email you submitted with. Try a seeded ID like NIL-1001 to see an at-risk ticket.</p>
+          <form id="trackForm">
+            <div class="field">
+              <label for="tQuery">Ticket ID or email</label>
+              <input id="tQuery" type="text" placeholder="NIL-1001 or you@yourstore.com" />
+            </div>
+            <button class="btn block" type="submit">Track request</button>
+          </form>
+          <div class="err" id="trackErr" role="alert"></div>
+          <div class="track-result" id="trackResult"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- INBOX (shared, support-led) -->
+  <section aria-labelledby="inboxH" id="inboxSection">
+    <div class="sec-head">
+      <h2 id="inboxH">Support inbox</h2>
+      <p>Every ticket in one place, sorted so breached and at-risk tickets sit at the top. Select any ticket for the full timeline.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter tickets">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="breached" aria-pressed="false">Breached</button>
+      <button type="button" data-filter="atrisk" aria-pressed="false">At risk</button>
+      <button type="button" data-filter="open" aria-pressed="false">Open</button>
+      <button type="button" data-filter="resolved" aria-pressed="false">Resolved</button>
+      <button type="button" data-filter="Premium" aria-pressed="false">Premium</button>
+      <button type="button" data-filter="Standard" aria-pressed="false">Standard plan</button>
+      <button type="button" data-filter="Critical" aria-pressed="false">Critical</button>
+    </div>
+    <div class="inbox" id="inbox"></div>
+    <p class="note" id="inboxEmpty" style="display:none">No tickets match this filter.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>About this demo.</b> This is a portfolio prototype built for a Nile open internship application. The 16 seeded tickets are demo data using store names from Nile's public store samples; they are not real Nile tickets. Tickets you submit and chat messages you send during your visit are held in this page only, for this session, so you can see them flow into the inbox and tracking. First response deadlines use Nile's published SLA. Resolution targets (24 hours Critical, 72 hours Standard) are proposed by this project and labelled as such, because Nile publishes first response times only.</p>
+    <p style="margin-top:10px">Built by Muiz Anthony, operations and customer operations specialist. Support contact at Nile today: business@nile.ng.</p>
+  </div>
+</footer>
+
+<!-- Ticket detail modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <button class="close-x" id="modalClose" type="button" aria-label="Close ticket details">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Live chat -->
+<button class="chat-fab" id="chatFab" type="button" aria-expanded="false">
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Live chat <span class="tag" style="background:#fff;color:var(--brand-dark)">Demo</span>
+</button>
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Live chat demo">
+  <div class="chat-head">
+    <b>Nile Support Chat</b>
+    <span>Demo chat with simulated replies. No live agent is connected.</span>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-quick">
+    <button type="button" data-q="My storefront is down">My storefront is down</button>
+    <button type="button" data-q="My payout is delayed">Payout delayed</button>
+    <button type="button" data-q="How do I track my ticket?">Track my ticket</button>
+  </div>
+  <form class="chat-form" id="chatForm">
+    <input id="chatInput" type="text" placeholder="Type your message..." aria-label="Chat message" />
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script>
+"use strict";
+/* ---------- SLA rules (Nile published first response; proposed resolution) ---------- */
+var FR_MIN = { Critical: { Premium: 60, Standard: 240 }, Standard: { Premium: 360, Standard: 720 } };
+var RES_MIN = { Critical: 1440, Standard: 4320 };
+var CRITICAL_CATS = ["Storefront down", "Checkout or payments broken"];
+
+function trackFor(category){ return CRITICAL_CATS.indexOf(category) >= 0 ? "Critical" : "Standard"; }
+function priorityFor(track, category){
+  if (track === "Critical") return "Critical";
+  if (/payout|refund|charged twice|payment/i.test(category)) return "High";
+  return "Normal";
+}
+
+/* ---------- Seed data: offsets in minutes relative to page load ---------- */
+var now0 = Date.now();
+function minsAgo(m){ return now0 - m * 60000; }
+var seed = [
+ {id:"NIL-1001", merchant:"Adaeze O.", store:"Zluva Fashion", email:"adaeze@zluvafashion.example", plan:"Premium", category:"Storefront down", issue:"Storefront down, customers seeing an error page", channel:"Email", created:minsAgo(45), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1002", merchant:"Chidi M.", store:"Excess Hair", email:"chidi@excesshair.example", plan:"Standard", category:"Checkout or payments broken", issue:"Checkout failing, customers cannot complete payment via Paystack", channel:"WhatsApp", created:minsAgo(180), respondedAfter:120, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1003", merchant:"Fatima B.", store:"Miyuki Bakery", email:"fatima@miyukibakery.example", plan:"Premium", category:"Shipping and delivery", issue:"Shipping labels not generating for orders", channel:"In-app", created:minsAgo(120), respondedAfter:60, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1004", merchant:"Tunde A.", store:"Goblin & Coal", email:"tunde@goblinandcoal.example", plan:"Standard", category:"Inventory and products", issue:"Inventory count wrong after a sale, stock showing negative", channel:"Email", created:minsAgo(480), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1005", merchant:"Ngozi E.", store:"Glow Skincare", email:"ngozi@glowskincare.example", plan:"Premium", category:"Inventory and products", issue:"Cannot upload product images, error on save", channel:"Email", created:minsAgo(60), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1006", merchant:"Emeka O.", store:"Wholesale Hub", email:"emeka@wholesalehub.example", plan:"Standard", category:"Account, billing and plans", issue:"Wants to upgrade to Premium, question about dedicated account manager", channel:"Email", created:minsAgo(1200), respondedAfter:600, resolvedAfter:1080, status:"Resolved"},
+ {id:"NIL-1007", merchant:"Aisha K.", store:"Zluva Fashion", email:"aisha@zluvafashion.example", plan:"Premium", category:"Payouts and refunds", issue:"Refund not processed for a cancelled order", channel:"WhatsApp", created:minsAgo(300), respondedAfter:60, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1008", merchant:"David O.", store:"Miyuki Bakery", email:"david@miyukibakery.example", plan:"Standard", category:"Domain and store settings", issue:"Custom domain not connecting, DNS issue", channel:"In-app", created:minsAgo(1800), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1009", merchant:"Sarah L.", store:"Excess Hair", email:"sarah@excesshair.example", plan:"Premium", category:"Something else", issue:"Abandoned cart emails not sending", channel:"Email", created:minsAgo(240), respondedAfter:180, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1010", merchant:"Michael T.", store:"Goblin & Coal", email:"michael@goblinandcoal.example", plan:"Standard", category:"Storefront down", issue:"Storefront down", channel:"Email", created:minsAgo(300), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1011", merchant:"Hauwa S.", store:"Glow Skincare", email:"hauwa@glowskincare.example", plan:"Standard", category:"Account, billing and plans", issue:"How to set up volume discounts for wholesale", channel:"WhatsApp", created:minsAgo(120), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1012", merchant:"Peter N.", store:"Wholesale Hub", email:"peter@wholesalehub.example", plan:"Premium", category:"Payouts and refunds", issue:"Flutterwave payout delayed, money not received", channel:"Email", created:minsAgo(420), respondedAfter:300, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1013", merchant:"Grace A.", store:"Miyuki Bakery", email:"grace@miyukibakery.example", plan:"Premium", category:"Inventory and products", issue:"Product descriptions generated by Nile AI are wrong", channel:"In-app", created:minsAgo(180), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1014", merchant:"Yusuf B.", store:"Zluva Fashion", email:"yusuf@zluvafashion.example", plan:"Standard", category:"Account, billing and plans", issue:"Cannot add a new staff member, role permissions", channel:"Email", created:minsAgo(900), respondedAfter:660, resolvedAfter:840, status:"Resolved"},
+ {id:"NIL-1015", merchant:"Blessing C.", store:"Excess Hair", email:"blessing@excesshair.example", plan:"Standard", category:"Payouts and refunds", issue:"Customers charged twice for one order", channel:"WhatsApp", created:minsAgo(60), respondedAfter:null, resolvedAfter:null, status:"Open"},
+ {id:"NIL-1016", merchant:"Kemi D.", store:"Goblin & Coal", email:"kemi@goblinandcoal.example", plan:"Premium", category:"Account, billing and plans", issue:"Wants to add a second store, question about multi-store", channel:"Email", created:minsAgo(1560), respondedAfter:240, resolvedAfter:1200, status:"Resolved"}
+];
+seed.forEach(function(t){
+  t.track = trackFor(t.category);
+  t.priority = priorityFor(t.track, t.category);
+  t.description = t.issue;
+});
+var tickets = seed.slice();
+var nextNum = 1017;
+var activeFilter = "all";
+
+/* ---------- Helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function frDeadline(t){ return t.created + FR_MIN[t.track][t.plan] * 60000; }
+function resDeadline(t){ return t.created + RES_MIN[t.track] * 60000; }
+function respondedAt(t){ return t.respondedAfter == null ? null : t.created + t.respondedAfter * 60000; }
+function resolvedAt(t){ return t.resolvedAfter == null ? null : t.created + t.resolvedAfter * 60000; }
+function fmtDT(ts){
+  var d = new Date(ts);
+  return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}) + ", " + d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
+}
+function fmtDur(mins){
+  var neg = mins < 0; mins = Math.abs(Math.round(mins));
+  var h = Math.floor(mins/60), m = mins%60;
+  var s = h > 0 ? (h + "h " + (m>0 ? m + "m" : "")).trim() : m + "m";
+  return (neg ? "-" : "") + s;
+}
+function frState(t, now){
+  var dl = frDeadline(t), ra = respondedAt(t);
+  if (ra != null) return ra <= dl ? "met" : "late";
+  if (now > dl) return "breached";
+  if (dl - now <= 30*60000) return "atrisk";
+  return "pending";
+}
+function statusLabel(t){
+  if (t.status === "Resolved") return '<span class="tag tag-res">Resolved</span>';
+  if (respondedAt(t) != null) return '<span class="tag tag-prog">In progress</span>';
+  return '<span class="tag tag-open">Open, awaiting response</span>';
+}
+function flagTag(t, now){
+  var s = frState(t, now);
+  if (s === "breached") return '<span class="tag tag-breach">Breached</span>';
+  if (s === "atrisk") return '<span class="tag tag-risk">At risk</span>';
+  if (s === "met") return '<span class="tag tag-ok">SLA met</span>';
+  if (s === "late") return '<span class="tag tag-breach">Responded late</span>';
+  return '<span class="tag tag-ok">Within SLA</span>';
+}
+function esc(s){ var d=document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+
+/* ---------- Dashboard ---------- */
+function compliance(list, now){
+  var decided = 0, ok = 0;
+  list.forEach(function(t){
+    var s = frState(t, now);
+    if (s === "met"){ decided++; ok++; }
+    else if (s === "late" || s === "breached"){ decided++; }
+  });
+  return decided === 0 ? null : Math.round(ok/decided*100);
+}
+function renderDashboard(){
+  var now = Date.now();
+  var open = tickets.filter(function(t){ return t.status !== "Resolved"; });
+  var resolved = tickets.filter(function(t){ return t.status === "Resolved"; });
+  $("stTotal").textContent = tickets.length;
+  $("stTotalSub").textContent = tickets.length + " tickets in the inbox";
+  $("stOpen").textContent = open.length + " / " + resolved.length;
+  var fr = compliance(tickets, now);
+  $("stFR").textContent = fr == null ? "n/a" : fr + "%";
+  var resOk = 0, resDecided = 0;
+  tickets.forEach(function(t){
+    var ra = resolvedAt(t);
+    if (ra != null){ resDecided++; if (ra <= resDeadline(t)) resOk++; }
+  });
+  $("stRes").textContent = resDecided === 0 ? "n/a" : Math.round(resOk/resDecided*100) + "%";
+  var breached = tickets.filter(function(t){ return frState(t, now) === "breached"; });
+  var atrisk = tickets.filter(function(t){ return frState(t, now) === "atrisk"; });
+  $("stBreach").textContent = breached.length;
+  $("stRisk").textContent = atrisk.length;
+  var resp = tickets.filter(function(t){ return t.respondedAfter != null; });
+  if (resp.length){
+    var avg = resp.reduce(function(a,t){ return a + t.respondedAfter; },0)/resp.length;
+    $("stAvg").textContent = fmtDur(avg);
+  } else { $("stAvg").textContent = "n/a"; }
+  $("stCrit").textContent = tickets.filter(function(t){ return t.track === "Critical"; }).length;
+  [["Premium","prem"],["Standard","std"]].forEach(function(pair){
+    var list = tickets.filter(function(t){ return t.plan === pair[0]; });
+    var c = compliance(list, now);
+    $(pair[1]+"Count").textContent = list.length;
+    $(pair[1]+"FR").textContent = c == null ? "n/a" : c + "%";
+    $(pair[1]+"Bar").style.width = (c == null ? 0 : c) + "%";
+    $(pair[1]+"Open").textContent = list.filter(function(t){ return t.status !== "Resolved"; }).length;
+    $(pair[1]+"Breach").textContent = list.filter(function(t){ return frState(t, now) === "breached"; }).length;
+  });
+}
+
+/* ---------- Inbox ---------- */
+function sortKey(t, now){
+  var s = frState(t, now);
+  if (s === "breached") return 0;
+  if (s === "atrisk") return 1;
+  if (t.status === "Resolved") return 3;
+  return 2;
+}
+function matchesFilter(t, now){
+  if (activeFilter === "all") return true;
+  if (activeFilter === "breached") return frState(t, now) === "breached";
+  if (activeFilter === "atrisk") return frState(t, now) === "atrisk";
+  if (activeFilter === "open") return t.status !== "Resolved";
+  if (activeFilter === "resolved") return t.status === "Resolved";
+  if (activeFilter === "Premium" || activeFilter === "Standard") return t.plan === activeFilter;
+  if (activeFilter === "Critical") return t.track === "Critical";
+  return true;
+}
+function renderInbox(){
+  var now = Date.now();
+  var list = tickets.filter(function(t){ return matchesFilter(t, now); });
+  list.sort(function(a,b){ return sortKey(a,now) - sortKey(b,now) || a.created - b.created; });
+  $("inboxEmpty").style.display = list.length ? "none" : "block";
+  $("inbox").innerHTML = list.map(function(t){
+    var s = frState(t, now);
+    var dl = frDeadline(t);
+    var leftMin = (dl - now)/60000;
+    var clockTxt, clockCls = "";
+    if (respondedAt(t) != null){ clockTxt = "First response in " + fmtDur(t.respondedAfter); }
+    else if (s === "breached"){ clockTxt = "Overdue by " + fmtDur(-leftMin); clockCls = "over"; }
+    else { clockTxt = fmtDur(leftMin) + " left to respond"; if (s === "atrisk") clockCls = "soon"; }
+    var cls = s === "breached" ? "breached" : (s === "atrisk" ? "atrisk" : "");
+    return '<button type="button" class="trow ' + cls + '" data-tid="' + t.id + '">' +
+      '<span class="trow-main">' +
+        '<span class="trow-top"><span class="tid">' + t.id + '</span>' +
+        (t.track === "Critical" ? '<span class="tag tag-crit">Critical</span>' : '<span class="tag tag-std">Standard</span>') +
+        '<span class="tag ' + (t.plan === "Premium" ? "tag-prem" : "tag-plan") + '">' + t.plan + '</span>' +
+        statusLabel(t) + flagTag(t, now) +
+        '<span class="when">' + fmtDT(t.created) + '</span></span>' +
+        '<span class="issue">' + esc(t.issue) + '</span>' +
+        '<span class="trow-meta"><span><b>' + esc(t.merchant) + '</b> · ' + esc(t.store) + '</span><span>Channel: ' + esc(t.channel) + '</span><span>Category: ' + esc(t.category) + '</span><span>Priority: ' + t.priority + '</span></span>' +
+      '</span>' +
+      '<span class="trow-side">' +
+        '<span class="trow-sla"><span>First response due ' + fmtDT(dl) + '</span></span>' +
+        '<span class="clock ' + clockCls + '">' + clockTxt + '</span>' +
+        '<span class="trow-sla"><span>Resolution target ' + fmtDT(resDeadline(t)) + ' (proposed)</span></span>' +
+      '</span>' +
+    '</button>';
+  }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll(".trow"), function(el){
+    el.addEventListener("click", function(){ openTicket(el.getAttribute("data-tid")); });
+  });
+}
+function renderAll(){ renderDashboard(); renderInbox(); }
+
+/* ---------- Ticket detail / tracking view ---------- */
+function ticketDetailHTML(t){
+  var now = Date.now();
+  var dl = frDeadline(t), rdl = resDeadline(t), ra = respondedAt(t), rz = resolvedAt(t);
+  var s = frState(t, now);
+  var slaLine;
+  if (ra != null) slaLine = "First response sent in " + fmtDur(t.respondedAfter) + " (deadline was " + fmtDT(dl) + ")";
+  else if (s === "breached") slaLine = "First response deadline passed at " + fmtDT(dl) + ". This ticket is breached and escalated.";
+  else slaLine = "First response due by " + fmtDT(dl) + " (" + fmtDur((dl-now)/60000) + " left)";
+  var tl = "";
+  tl += '<li><b>Request received</b><div class="tt">' + fmtDT(t.created) + ' via ' + esc(t.channel) + '</div></li>';
+  tl += '<li><b>Auto-triaged as ' + t.track + ' track, ' + t.priority + ' priority</b><div class="tt">Based on category (' + esc(t.category) + ') and ' + t.plan + ' plan. First response deadline set to ' + fmtDT(dl) + '.</div></li>';
+  if (ra != null) tl += '<li><b>Support responded</b><div class="tt">' + fmtDT(ra) + ', ' + fmtDur(t.respondedAfter) + ' after the request came in</div></li>';
+  else tl += '<li class="pending"><b>Awaiting first response</b><div class="tt">' + esc(slaLine) + '</div></li>';
+  if (t.status === "Resolved" && rz != null) tl += '<li><b>Resolved</b><div class="tt">' + fmtDT(rz) + '. Proposed resolution target was ' + fmtDT(rdl) + '.</div></li>';
+  else tl += '<li class="pending"><b>Resolution</b><div class="tt">Proposed target: ' + fmtDT(rdl) + ' (' + t.track + ' track, proposed target, not a published Nile SLA)</div></li>';
+  return '<p style="margin-bottom:6px"><span class="tid mono" style="font-weight:600">' + t.id + '</span> ' +
+    (t.track === "Critical" ? '<span class="tag tag-crit">Critical</span>' : '<span class="tag tag-std">Standard</span>') + ' ' +
+    '<span class="tag ' + (t.plan === "Premium" ? "tag-prem" : "tag-plan") + '">' + t.plan + ' plan</span> ' + statusLabel(t) + ' ' + flagTag(t, now) + '</p>' +
+    '<h3 id="modalTitle" style="font-size:19px">' + esc(t.issue) + '</h3>' +
+    '<p style="color:var(--ink-2);font-size:14.5px;margin-top:6px">' + esc(t.description) + '</p>' +
+    '<div class="kv">' +
+      '<div><div class="k">Merchant</div>' + esc(t.merchant) + ' · ' + esc(t.store) + '</div>' +
+      '<div><div class="k">Channel</div>' + esc(t.channel) + '</div>' +
+      '<div><div class="k">First response deadline (Nile SLA)</div>' + fmtDT(dl) + '</div>' +
+      '<div><div class="k">Resolution target (proposed)</div>' + fmtDT(rdl) + '</div>' +
+    '</div>' +
+    '<p style="margin-top:12px;font-size:14.5px"><b>SLA status:</b> ' + esc(slaLine) + '</p>' +
+    '<ul class="timeline">' + tl + '</ul>';
+}
+function openTicket(id){
+  var t = tickets.filter(function(x){ return x.id === id; })[0];
+  if (!t) return;
+  $("modalBody").innerHTML = ticketDetailHTML(t);
+  $("modal").classList.add("open");
+}
+$("modalClose").addEventListener("click", function(){ $("modal").classList.remove("open"); });
+$("modal").addEventListener("click", function(e){ if (e.target === $("modal")) $("modal").classList.remove("open"); });
+document.addEventListener("keydown", function(e){ if (e.key === "Escape"){ $("modal").classList.remove("open"); $("chatPanel").classList.remove("open"); } });
+
+/* ---------- Filters ---------- */
+$("filters").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  activeFilter = b.getAttribute("data-filter");
+  Array.prototype.forEach.call($("filters").querySelectorAll("button"), function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+  renderInbox();
+});
+
+/* ---------- View tabs ---------- */
+function setView(which){
+  var merchant = which === "merchant";
+  $("tabMerchant").setAttribute("aria-selected", merchant ? "true" : "false");
+  $("tabSupport").setAttribute("aria-selected", merchant ? "false" : "true");
+  $("merchantSections").classList.toggle("hidden-view", !merchant);
+  $("supportSections").classList.toggle("hidden-view", merchant);
+  if (merchant) $("portalH").scrollIntoView({behavior:"smooth", block:"start"});
+  else $("dashH").scrollIntoView({behavior:"smooth", block:"start"});
+}
+$("tabMerchant").addEventListener("click", function(){ setView("merchant"); });
+$("tabSupport").addEventListener("click", function(){ setView("support"); });
+
+/* ---------- Theme (light by default, in-session toggle only) ---------- */
+$("themeBtn").addEventListener("click", function(){
+  var dark = document.documentElement.getAttribute("data-theme") !== "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  $("themeBtn").textContent = dark ? "Light mode" : "Dark mode";
+});
+
+/* ---------- Submit a ticket ---------- */
+$("ticketForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var name = $("fName").value.trim(), store = $("fStore").value.trim(), email = $("fEmail").value.trim(),
+      plan = $("fPlan").value, category = $("fCategory").value, channel = $("fChannel").value, desc = $("fDesc").value.trim();
+  var err = $("formErr"), ok = $("formSuccess"), tri = $("triageBox");
+  err.classList.remove("show"); ok.classList.remove("show"); tri.classList.remove("show");
+  if (!name || !store || !email || !desc){ err.textContent = "Please fill in your name, store, email and a short description of the issue."; err.classList.add("show"); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent = "That email address does not look complete. Check it and try again."; err.classList.add("show"); return; }
+  var track = trackFor(category);
+  var t = {
+    id: "NIL-" + (nextNum++), merchant: name, store: store, email: email.toLowerCase(), plan: plan,
+    category: category, issue: desc.length > 90 ? desc.slice(0, 90) + "..." : desc, description: desc,
+    channel: channel, created: Date.now(), respondedAfter: null, resolvedAfter: null, status: "Open",
+    track: track, priority: priorityFor(track, category)
+  };
+  tickets.unshift(t);
+  renderAll();
+  ok.innerHTML = 'Request received. Your tracking ID is <span class="tid">' + t.id + '</span><br />Keep it safe. You can follow this request any time in the Track my request panel using this ID or your email (' + esc(email) + ').';
+  ok.classList.add("show");
+  tri.innerHTML = "<b>Auto-triage:</b> " + track + " track, " + t.priority + " priority on the " + plan + " plan. First response deadline: <b>" + fmtDT(frDeadline(t)) + "</b> (Nile SLA). Proposed resolution target: <b>" + fmtDT(resDeadline(t)) + "</b>. This ticket is now at the top of the support inbox view.";
+  tri.classList.add("show");
+  $("ticketForm").reset();
+  $("fPlan").value = plan;
+});
+
+/* ---------- Track a request ---------- */
+$("trackForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var q = $("tQuery").value.trim();
+  var err = $("trackErr"), res = $("trackResult");
+  err.classList.remove("show"); res.classList.remove("show"); res.innerHTML = "";
+  if (!q){ err.textContent = "Enter a ticket ID or an email address to track a request."; err.classList.add("show"); return; }
+  var found = tickets.filter(function(t){ return t.id.toLowerCase() === q.toLowerCase(); });
+  if (!found.length) found = tickets.filter(function(t){ return t.email.toLowerCase() === q.toLowerCase(); });
+  if (!found.length){ err.textContent = "No request found for \"" + q + "\". Check the ID or email and try again. Seeded demo IDs run from NIL-1001 to NIL-1016."; err.classList.add("show"); return; }
+  found.sort(function(a,b){ return b.created - a.created; });
+  res.innerHTML = found.map(function(t){ return '<div style="border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:10px">' + ticketDetailHTML(t) + "</div>"; }).join("");
+  res.classList.add("show");
+});
+
+/* ---------- Live chat (simulated demo) ---------- */
+var chatOpened = false;
+function addMsg(text, who){
+  var d = document.createElement("div");
+  d.className = "msg " + who; d.textContent = text;
+  $("chatBody").appendChild(d);
+  $("chatBody").scrollTop = $("chatBody").scrollHeight;
+  return d;
+}
+function botReply(userText){
+  var typing = addMsg("Support is typing...", "agent typing");
+  var lower = userText.toLowerCase();
+  var reply;
+  if (/down|error page|not loading|offline/.test(lower)){
+    reply = "That sounds like a Critical issue, and I am sorry your store is affected. First response target for a down storefront is 1 hour on Premium and 4 hours on Standard under Nile's SLA. I recommend opening a ticket right away in the portal on this page under Storefront down, so it is timed and tracked. If you tell me your store name and plan here, I can note the details for the ticket.";
+  } else if (/payout|flutterwave|paystack|money|refund|charged twice/.test(lower)){
+    reply = "Payment and payout issues are tracked as Standard enquiries unless checkout is fully broken. First response target is 6 hours on Premium and 12 hours on Standard. The fastest route is the ticket portal on this page: choose Payouts and refunds, add the order or payout reference, and you will get a tracking ID immediately.";
+  } else if (/track|status|ticket|NIL-/i.test(userText)){
+    reply = "You can track any request on this page in the Track my request panel. Enter your ticket ID (it looks like NIL-1001) or the email you submitted with, and you will see the status, the timeline, and your SLA deadline. In this demo, NIL-1008 is a breached ticket and NIL-1001 is at risk, if you want to see how those look.";
+  } else if (/price|plan|upgrade|premium/.test(lower)){
+    reply = "Plan questions are Standard enquiries: first response within 6 hours on Premium and 12 hours on Standard. Premium tickets get the faster deadline in the inbox, and the dashboard splits compliance by plan so the team can prove it. Submit the question through the portal under Account, billing and plans to get a tracked answer.";
+  } else if (/ship|deliver|label/.test(lower)){
+    reply = "For shipping problems, open a ticket under Shipping and delivery and include the order number. It will be triaged as a Standard enquiry with a first response deadline of 6 hours (Premium) or 12 hours (Standard), and you can watch its progress on the tracking panel.";
+  } else if (/hi|hello|hey/.test(lower)){
+    reply = "Hello, and welcome to Nile support. I can help with storefront outages, checkout and payout problems, shipping, inventory, and tracking an existing request. What is going on with your store today?";
+  } else {
+    reply = "Thanks for the details. In the full system this chat hands off to a tracked ticket so nothing gets lost. For now, the quickest way to get a timed response is the ticket portal on this page: pick the closest category, and auto-triage will set your deadline from your plan tier right away. Anything else I can explain about how tracking works?";
+  }
+  setTimeout(function(){
+    typing.remove();
+    addMsg(reply, "agent");
+  }, 900);
+}
+function toggleChat(open){
+  var panel = $("chatPanel");
+  var willOpen = typeof open === "boolean" ? open : !panel.classList.contains("open");
+  panel.classList.toggle("open", willOpen);
+  $("chatFab").setAttribute("aria-expanded", willOpen ? "true" : "false");
+  if (willOpen && !chatOpened){
+    chatOpened = true;
+    addMsg("Hello, this is the Nile support chat demo. Replies here are simulated by the prototype, and no live agent is connected. Tell me what is happening with your store, or use a quick option below.", "agent");
+  }
+  if (willOpen) $("chatInput").focus();
+}
+$("chatFab").addEventListener("click", function(){ toggleChat(); });
+$("jumpChat").addEventListener("click", function(){ toggleChat(true); });
+$("chatForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var v = $("chatInput").value.trim();
+  if (!v) return;
+  addMsg(v, "user");
+  $("chatInput").value = "";
+  botReply(v);
+});
+Array.prototype.forEach.call(document.querySelectorAll(".chat-quick button"), function(b){
+  b.addEventListener("click", function(){
+    var q = b.getAttribute("data-q");
+    addMsg(q, "user");
+    botReply(q);
+  });
+});
+
+/* ---------- Live countdown refresh ---------- */
+setInterval(function(){ renderAll(); }, 30000);
+renderAll();
+</script>
+</body>
+</html>
