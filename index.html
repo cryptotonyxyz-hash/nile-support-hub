@@ -446,7 +446,7 @@ footer p{max-width:760px}
 <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Live chat demo">
   <div class="chat-head">
     <b>Nile Support Chat</b>
-    <span>Demo chat with simulated replies. No live agent is connected.</span>
+    <span>AI demo agent. Answers from the Nile support guide, and hands urgent issues to a human.</span>
   </div>
   <div class="chat-body" id="chatBody"></div>
   <div class="chat-quick">
@@ -626,6 +626,7 @@ function renderInbox(){
         (t.track === "Critical" ? '<span class="tag tag-crit">Critical</span>' : '<span class="tag tag-std">Standard</span>') +
         '<span class="tag ' + (t.plan === "Premium" ? "tag-prem" : "tag-plan") + '">' + t.plan + '</span>' +
         statusLabel(t) + flagTag(t, now) +
+        (t.escalated ? '<span class="tag tag-risk">Escalated to human</span>' : '') +
         '<span class="when">' + fmtDT(t.created) + '</span></span>' +
         '<span class="issue">' + esc(t.issue) + '</span>' +
         '<span class="trow-meta"><span><b>' + esc(t.merchant) + '</b> · ' + esc(t.store) + '</span><span>Channel: ' + esc(t.channel) + '</span><span>Category: ' + esc(t.category) + '</span><span>Priority: ' + t.priority + '</span></span>' +
@@ -655,6 +656,7 @@ function ticketDetailHTML(t){
   var tl = "";
   tl += '<li><b>Request received</b><div class="tt">' + fmtDT(t.created) + ' via ' + esc(t.channel) + '</div></li>';
   tl += '<li><b>Auto-triaged as ' + t.track + ' track, ' + t.priority + ' priority</b><div class="tt">Based on category (' + esc(t.category) + ') and ' + t.plan + ' plan. First response deadline set to ' + fmtDT(dl) + '.</div></li>';
+  if (t.escalated) tl += '<li><b>Escalated to a human agent</b><div class="tt">The AI agent flagged this as urgent and asked a human agent to take over.</div></li>';
   if (ra != null) tl += '<li><b>Support responded</b><div class="tt">' + fmtDT(ra) + ', ' + fmtDur(t.respondedAfter) + ' after the request came in</div></li>';
   else tl += '<li class="pending"><b>Awaiting first response</b><div class="tt">' + esc(slaLine) + '</div></li>';
   if (t.status === "Resolved" && rz != null) tl += '<li><b>Resolved</b><div class="tt">' + fmtDT(rz) + '. Proposed resolution target was ' + fmtDT(rdl) + '.</div></li>';
@@ -752,8 +754,10 @@ $("trackForm").addEventListener("submit", function(e){
   res.classList.add("show");
 });
 
-/* ---------- Live chat (simulated demo) ---------- */
+/* ---------- Live chat (Nile AI support agent) ---------- */
 var chatOpened = false;
+var chatHistory = [];
+var chatBusy = false;
 function addMsg(text, who){
   var d = document.createElement("div");
   d.className = "msg " + who; d.textContent = text;
@@ -761,29 +765,66 @@ function addMsg(text, who){
   $("chatBody").scrollTop = $("chatBody").scrollHeight;
   return d;
 }
-function botReply(userText){
-  var typing = addMsg("Support is typing...", "agent typing");
-  var lower = userText.toLowerCase();
-  var reply;
-  if (/down|error page|not loading|offline/.test(lower)){
-    reply = "That sounds like a Critical issue, and I am sorry your store is affected. First response target for a down storefront is 1 hour on Premium and 4 hours on Standard under Nile's SLA. I recommend opening a ticket right away in the portal on this page under Storefront down, so it is timed and tracked. If you tell me your store name and plan here, I can note the details for the ticket.";
-  } else if (/payout|flutterwave|paystack|money|refund|charged twice/.test(lower)){
-    reply = "Payment and payout issues are tracked as Standard enquiries unless checkout is fully broken. First response target is 6 hours on Premium and 12 hours on Standard. The fastest route is the ticket portal on this page: choose Payouts and refunds, add the order or payout reference, and you will get a tracking ID immediately.";
-  } else if (/track|status|ticket|NIL-/i.test(userText)){
-    reply = "You can track any request on this page in the Track my request panel. Enter your ticket ID (it looks like NIL-1001) or the email you submitted with, and you will see the status, the timeline, and your SLA deadline. In this demo, NIL-1008 is a breached ticket and NIL-1001 is at risk, if you want to see how those look.";
-  } else if (/price|plan|upgrade|premium/.test(lower)){
-    reply = "Plan questions are Standard enquiries: first response within 6 hours on Premium and 12 hours on Standard. Premium tickets get the faster deadline in the inbox, and the dashboard splits compliance by plan so the team can prove it. Submit the question through the portal under Account, billing and plans to get a tracked answer.";
-  } else if (/ship|deliver|label/.test(lower)){
-    reply = "For shipping problems, open a ticket under Shipping and delivery and include the order number. It will be triaged as a Standard enquiry with a first response deadline of 6 hours (Premium) or 12 hours (Standard), and you can watch its progress on the tracking panel.";
-  } else if (/hi|hello|hey/.test(lower)){
-    reply = "Hello, and welcome to Nile support. I can help with storefront outages, checkout and payout problems, shipping, inventory, and tracking an existing request. What is going on with your store today?";
-  } else {
-    reply = "Thanks for the details. In the full system this chat hands off to a tracked ticket so nothing gets lost. For now, the quickest way to get a timed response is the ticket portal on this page: pick the closest category, and auto-triage will set your deadline from your plan tier right away. Anything else I can explain about how tracking works?";
-  }
-  setTimeout(function(){
+function compactTickets(){
+  return tickets.map(function(t){
+    return { id: t.id, merchant: t.merchant, store: t.store, email: t.email, plan: t.plan, category: t.category, issue: t.issue, status: t.status, track: t.track, priority: t.priority, created: t.created, escalated: !!t.escalated };
+  });
+}
+function applyTicketUpdates(updates){
+  if (!updates || !updates.length) return;
+  updates.forEach(function(u){
+    var found = null;
+    tickets.forEach(function(t){ if (t.id === u.id) found = t; });
+    var merged = {
+      id: u.id, merchant: u.merchant, store: u.store, email: u.email, plan: u.plan,
+      category: u.category, issue: u.issue, description: u.description || u.issue,
+      channel: u.channel || "Live chat", created: u.created,
+      respondedAfter: null, resolvedAfter: null, status: u.status || "Open",
+      track: u.track, priority: u.priority, escalated: !!u.escalated
+    };
+    if (found){
+      tickets[tickets.indexOf(found)] = merged;
+    } else {
+      tickets.unshift(merged);
+    }
+  });
+  var max = 1016;
+  tickets.forEach(function(t){
+    var n = parseInt(String(t.id).replace("NIL-", ""), 10);
+    if (!isNaN(n) && n > max) max = n;
+  });
+  nextNum = max + 1;
+  renderAll();
+}
+async function sendToAgent(userText){
+  if (chatBusy) return;
+  chatBusy = true;
+  $("chatInput").disabled = true;
+  var typing = addMsg("Nile AI is typing...", "agent typing");
+  try {
+    var res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText, history: chatHistory.slice(-8), tickets: compactTickets() })
+    });
+    var data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
     typing.remove();
-    addMsg(reply, "agent");
-  }, 900);
+    if (!res.ok || !data || !data.reply){
+      addMsg("The AI agent is not reachable right now. You can still open a ticket in the portal on this page and it will be triaged right away.", "agent");
+    } else {
+      if (data.ticketUpdates) applyTicketUpdates(data.ticketUpdates);
+      addMsg(data.reply, "agent");
+      chatHistory.push({ role: "user", text: userText });
+      chatHistory.push({ role: "model", text: data.reply });
+    }
+  } catch (e){
+    typing.remove();
+    addMsg("The AI agent is not reachable right now. You can still open a ticket in the portal on this page and it will be triaged right away.", "agent");
+  }
+  chatBusy = false;
+  $("chatInput").disabled = false;
+  $("chatInput").focus();
 }
 function toggleChat(open){
   var panel = $("chatPanel");
@@ -792,7 +833,7 @@ function toggleChat(open){
   $("chatFab").setAttribute("aria-expanded", willOpen ? "true" : "false");
   if (willOpen && !chatOpened){
     chatOpened = true;
-    addMsg("Hello, this is the Nile support chat demo. Replies here are simulated by the prototype, and no live agent is connected. Tell me what is happening with your store, or use a quick option below.", "agent");
+    addMsg("Hello, this is Nile's AI support agent, a demo. I can answer questions, check a ticket, open a new ticket, or hand you to a human if your storefront is down. What is happening with your store today?", "agent");
   }
   if (willOpen) $("chatInput").focus();
 }
@@ -804,13 +845,13 @@ $("chatForm").addEventListener("submit", function(e){
   if (!v) return;
   addMsg(v, "user");
   $("chatInput").value = "";
-  botReply(v);
+  sendToAgent(v);
 });
 Array.prototype.forEach.call(document.querySelectorAll(".chat-quick button"), function(b){
   b.addEventListener("click", function(){
     var q = b.getAttribute("data-q");
     addMsg(q, "user");
-    botReply(q);
+    sendToAgent(q);
   });
 });
 

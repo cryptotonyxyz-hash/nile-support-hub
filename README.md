@@ -11,14 +11,14 @@ Nile's merchant support is email-only. A contact form and an email address, no l
 ## What this demo does
 
 Merchant-facing:
-- **Ticket portal** — a merchant submits a request (issue, plan tier, description) and gets a tracking ID.
-- **Track my request** — a merchant enters a ticket ID or email and sees the status, timeline, and SLA deadline.
-- **Live chat** — a chat widget with simulated support replies that quote Nile's actual SLA targets (labelled as a demo).
+- **Ticket portal**: a merchant submits a request (issue, plan tier, description) and gets a tracking ID.
+- **Track my request**: a merchant enters a ticket ID or email and sees the status, timeline, and SLA deadline.
+- **Live chat**: Nile AI support agent, powered by Google Gemini (model gemini-3.5-flash). It answers from the Nile support guide, looks up tickets by ID or email, creates tickets into the inbox with auto-triage, and escalates Critical issues (storefront down, checkout broken) to a human. Labelled as an AI demo agent in the chat panel.
 
 Support team-facing:
-- **Support inbox** — all tickets with merchant, store, plan tier, channel, category, priority, deadlines, live countdowns, and breach/at-risk flags.
-- **Auto-triage** — priority and deadlines computed from issue type and plan tier at intake.
-- **Dashboard** — first-response compliance, resolution compliance, open vs resolved, and a Premium vs Standard split.
+- **Support inbox**: all tickets with merchant, store, plan tier, channel, category, priority, deadlines, live countdowns, and breach/at-risk flags.
+- **Auto-triage**: priority and deadlines computed from issue type and plan tier at intake.
+- **Dashboard**: first-response compliance, resolution compliance, open vs resolved, and a Premium vs Standard split.
 
 ## Nile's SLA (enforced exactly)
 
@@ -37,4 +37,10 @@ Resolution targets (24h critical, 72h standard) are proposed by this demo, not p
 
 ## Run it
 
-Open `index.html` in a browser, or serve the folder with any static server. Everything is client-side; seeded tickets are embedded, and anything a visitor submits during their visit is held in the page so it shows up in the inbox and can be tracked.
+Open `index.html` in a browser, or serve the folder with any static server. Everything is client-side except the chat agent; seeded tickets are embedded, and anything a visitor submits during their visit is held in the page so it shows up in the inbox and can be tracked.
+
+## AI agent (`api/chat.js`)
+
+The chat is backed by a Vercel serverless function, `api/chat.js` (plain Node, no dependencies). It calls Gemini `generateContent` with a system prompt built from the Nile support guide above plus the tickets on the page, and with tools for `lookup_ticket`, `create_ticket` and `escalate`. It reads `GEMINI_API_KEY` from the environment; no key is stored in the repo.
+
+To deploy: push to GitHub, then in Vercel add an environment variable named `GEMINI_API_KEY` with a Google AI Studio key, and redeploy. Without the key, the chat shows a "not reachable" message and points visitors to the ticket portal instead. Locally, `node --check api/chat.js` validates the function syntax.
