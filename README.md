@@ -13,7 +13,7 @@ Nile's merchant support is email-only. A contact form and an email address, no l
 Merchant-facing:
 - **Ticket portal**: a merchant submits a request (issue, plan tier, description) and gets a tracking ID.
 - **Track my request**: a merchant enters a ticket ID or email and sees the status, timeline, and SLA deadline.
-- **Live chat**: Nile AI support agent, powered by Google Gemini (model gemini-3.5-flash). It answers from the Nile support guide, looks up tickets by ID or email, creates tickets into the inbox with auto-triage, and escalates Critical issues (storefront down, checkout broken) to a human. Labelled as an AI demo agent in the chat panel.
+- **Live chat**: Nile AI support agent, powered by Google Gemini (model gemini-3-flash-preview). It answers from the Nile support guide, looks up tickets by ID or email, creates tickets into the inbox with auto-triage, and escalates Critical issues (storefront down, checkout broken) to a human. Labelled as an AI demo agent in the chat panel.
 
 Support team-facing:
 - **Support inbox**: all tickets with merchant, store, plan tier, channel, category, priority, deadlines, live countdowns, and breach/at-risk flags.

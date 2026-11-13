@@ -16,7 +16,7 @@
  * No key is stored in this file. The key is never logged.
  */
 
-var MODEL = "gemini-3.5-flash";
+var MODEL = "gemini-3-flash-preview";
 var API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" + MODEL + ":generateContent";
 var CALL_TIMEOUT_MS = 30000;
 var MAX_ROUNDS = 3;
