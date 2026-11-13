@@ -18,7 +18,7 @@
 
 var MODEL = "gemini-3.5-flash";
 var API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" + MODEL + ":generateContent";
-var CALL_TIMEOUT_MS = 15000;
+var CALL_TIMEOUT_MS = 30000;
 var MAX_ROUNDS = 3;
 
 var FR_MIN = { Critical: { Premium: 60, Standard: 240 }, Standard: { Premium: 360, Standard: 720 } };
@@ -46,7 +46,8 @@ function priorityFor(track, category) {
 }
 
 function frDeadline(t) {
-  return t.created + FR_MIN[t.track][t.plan] * 60000;
+  var mins = (FR_MIN[t.track] && FR_MIN[t.track][t.plan]) || FR_MIN.Standard.Standard;
+  return t.created + mins * 60000;
 }
 
 function fmtDT(ts) {
@@ -174,7 +175,7 @@ function executeTool(name, args, tickets) {
           plan: t.plan,
           store: t.store,
           firstResponseDue: fmtDT(frDeadline(t)),
-          resolutionTargetProposed: fmtDT(t.created + RES_MIN[t.track] * 60000),
+          resolutionTargetProposed: fmtDT(t.created + (RES_MIN[t.track] || RES_MIN.Standard) * 60000),
           escalated: !!t.escalated
         };
       })
@@ -301,7 +302,13 @@ module.exports = async function (req, res) {
       });
   }
   var tickets = Array.isArray(body.tickets) ? body.tickets : [];
-  tickets = tickets.filter(function (t) { return t && t.id && t.created; });
+  tickets = tickets
+    .filter(function (t) { return t && t.id && t.created; })
+    .map(function (t) {
+      t.track = (t.track === "Critical" || t.track === "Standard") ? t.track : trackFor(t.category || "");
+      t.plan = t.plan === "Premium" ? "Premium" : "Standard";
+      return t;
+    });
   tickets.sort(function (a, b) { return b.created - a.created; });
 
   var systemText = buildSystemPrompt(tickets);
