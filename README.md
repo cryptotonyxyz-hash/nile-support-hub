@@ -45,4 +45,4 @@ The chat is backed by a Vercel serverless function, `api/chat.js` (plain Node, n
 
 To deploy: push to GitHub, then in Vercel add an environment variable named `GEMINI_API_KEY` with a Google AI Studio key, and redeploy. Without the key, the chat shows a "not reachable" message and points visitors to the ticket portal instead. Locally, `node --check api/chat.js` validates the function syntax.
 
-Redeploy note: adding `GEMINI_API_KEY` in Vercel requires a fresh deployment before the chat agent can answer.
+Redeploy note: adding `GEMINI_API_KEY` in Vercel requires a fresh deployment before the chat agent can answer. Git reconnected Nov 13, 2026; Vercel auto-deploy restored after the link dropped.
