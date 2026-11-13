@@ -44,3 +44,5 @@ Open `index.html` in a browser, or serve the folder with any static server. Ever
 The chat is backed by a Vercel serverless function, `api/chat.js` (plain Node, no dependencies). It calls Gemini `generateContent` with a system prompt built from the Nile support guide above plus the tickets on the page, and with tools for `lookup_ticket`, `create_ticket` and `escalate`. It reads `GEMINI_API_KEY` from the environment; no key is stored in the repo.
 
 To deploy: push to GitHub, then in Vercel add an environment variable named `GEMINI_API_KEY` with a Google AI Studio key, and redeploy. Without the key, the chat shows a "not reachable" message and points visitors to the ticket portal instead. Locally, `node --check api/chat.js` validates the function syntax.
+
+Redeploy note: adding `GEMINI_API_KEY` in Vercel requires a fresh deployment before the chat agent can answer.
